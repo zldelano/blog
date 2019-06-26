@@ -3,32 +3,33 @@ require('dotenv').config();
 const connectionString = process.env.DATABASE_URL;
 const pool = new Pool({ connectionString: connectionString });
 const express = require('express');
-var router = express.Router();
+const PORT = process.env.PORT || 5000;
+const path = require('path');
 
-var exampleQuery = "SELECT * FROM blog_user";
-
-pool.query(exampleQuery, function(err, result) {
-    // If an error occurred...
-    if (err) {
-        console.log("Erorr in query: ");
-        console.log(err);
-    }
-
-    // Log this to the console for debugging purposes
-    console.log("Back from DB with result:");
-    console.log(result.rows);
-});
-
-router.get('/users', function(req, res, next) {
-    pool.connect(connectionString, function(err, client, done) {
-        if (err)
-            return console.error('error fetching client from pool', err);
-        console.log("connected to database");
-        client.query('SELECT * FROM blog_user', function(err, result) {
-            done();
+express()
+    .set('views', path.join(__dirname, 'views'))
+    .set('view engine', 'ejs')
+    .get('/api/user', function(req, res) {
+        pool.query('SELECT * FROM blog_user', function(err, result) {
             if (err)
                 return console.error('error running query', err);
-            res.send(result);
+            res.json(result.rows);
         });
-    });
-});
+    })
+    .get('/api/blog_post', function(req, res) {
+        pool.query('SELECT * FROM blog_post', function(err, result) {
+            if (err)
+                return console.error('error running query', err);
+            res.json(result.rows);
+        });
+    })
+    .get('/', function(req, res) {
+        res.render('pages/index');
+    })
+    .get('/compose', function(req, res) {
+        res.json({ "message": "there ain't nothin' here yet fool" });
+    })
+    .get('/profile', function(req, res) {
+        res.json({ "message": "there ain't nothin' here yet fool" });
+    })
+    .listen(PORT, () => console.log(`Listening on ${ PORT }`));
