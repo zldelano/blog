@@ -9,10 +9,55 @@
 
     <% include ../partials/nav.ejs %>
 
-        <div class="container">
-            </p>
+        <button class="buttonClass">Button</button>
+        <div class="container" id="#index">
         </div>
 
 </body>
+
+
+<script>
+    window.onload = getBlogPosts();
+
+    function getBlogPosts() {
+        $.ajax({
+            url: "api/blog_post",
+            success: function(result) {
+                console.log(result);
+                document.getElementById("#index").innerHTML += '<ul class="list-group">';
+                result.forEach(function(item) {
+                    var listItem = '<li class="list-group-item" id="' + item['post_id'] + '"><a class="blog_post" href="' + item['post_id'] + '">' + item['title'] + '</a></li>';
+                    document.getElementById("#index").innerHTML += listItem;
+                });
+                document.getElementById("#index").innerHTML += '</ul>';
+            }
+        });
+    }
+    // https://stackoverflow.com/questions/16062899/jquery-doesnt-work-after-content-is-loaded-via-ajax
+    $(document).on('hover', 'a.blog_post', function() {
+        $('a.blog_post').hover(function() {
+            console.log("did we hover?");
+            // $.ajax({
+            //     url: "api/blog_post",
+            //     success: function(result) {
+            //         console.log(result);
+            //         document.getElementById("#index").innerHTML += '<ul class="list-group">';
+            //         result.forEach(function(item) {
+            //             var listItem = '<li class="list-group-item" name="blog_link" id="' + item['post_id'] + '"><a href="' + item['post_id'] + '">' + item['title'] + '</a></li>';
+            //             document.getElementById("#index").innerHTML += listItem;
+            //         });
+            //         document.getElementById("#index").innerHTML += '</ul>';
+            //     }
+            // });
+            $(this).animate({
+                color: 'red',
+            }, 1000);
+        });
+    })
+
+    $("button.buttonClass").click(function() {
+        console.log("we got a click");
+    });
+</script>
 
 </html>
