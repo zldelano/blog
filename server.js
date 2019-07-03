@@ -37,7 +37,7 @@ express()
         res.render('pages/index');
     })
     .get('/compose', function(req, res) {
-        res.json({ "message": "there ain't nothin' here yet fool" });
+        res.render('pages/compose');
     })
     .get('/profile', function(req, res) {
         res.json({ "message": "there ain't nothin' here yet fool" });

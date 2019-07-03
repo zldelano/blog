@@ -3,60 +3,51 @@
 
 <head>
     <% include ../partials/header.ejs %>
+
+        <script>
+            $(function() {
+                $("button.buttonClass").click(function() {
+                    console.log("we got a click");
+                });
+
+                var index = $('#index');
+                index.load(function() {
+                    console.log("index was loaded");
+                });
+
+                index.ready(function() {
+                    console.log("index is ready");
+                });
+
+                $(window).on('load', function() {
+                    // load the page with blog posts
+                    $.ajax({
+                        url: "api/blog_post",
+                        success: function(result) {
+                            var listPrefix = '<ul class="list-group">';
+                            var blogList = listPrefix;
+                            result.forEach(function(item) {
+                                var listItem = '<li class="list-group-item" id="' + item['post_id'] + '"><a class="blog_post" href="' + item['post_id'] + '">' + item['title'] + '</a></li>';
+                                blogList += listItem;
+                            });
+                            listPostfix = '</ul>';
+                            blogList += listPostfix;
+                            index.html(blogList);
+                        }
+                    });
+                });
+            });
+        </script>
+
 </head>
 
 <body>
 
     <% include ../partials/nav.ejs %>
 
-        <div class="container" id="#index">
+        <div class="container" id="index">
         </div>
 
 </body>
-
-
-<script>
-    window.onload = getBlogPosts();
-
-    function getBlogPosts() {
-        $.ajax({
-            url: "api/blog_post",
-            success: function(result) {
-                console.log(result);
-                document.getElementById("#index").innerHTML += '<ul class="list-group">';
-                result.forEach(function(item) {
-                    var listItem = '<li class="list-group-item" id="' + item['post_id'] + '"><a class="blog_post" href="' + item['post_id'] + '">' + item['title'] + '</a></li>';
-                    document.getElementById("#index").innerHTML += listItem;
-                });
-                document.getElementById("#index").innerHTML += '</ul>';
-            }
-        });
-    }
-    // https://stackoverflow.com/questions/16062899/jquery-doesnt-work-after-content-is-loaded-via-ajax
-    $(document).on('hover', 'a.blog_post', function() {
-        $('a.blog_post').hover(function() {
-            console.log("did we hover?");
-            // $.ajax({
-            //     url: "api/blog_post",
-            //     success: function(result) {
-            //         console.log(result);
-            //         document.getElementById("#index").innerHTML += '<ul class="list-group">';
-            //         result.forEach(function(item) {
-            //             var listItem = '<li class="list-group-item" name="blog_link" id="' + item['post_id'] + '"><a href="' + item['post_id'] + '">' + item['title'] + '</a></li>';
-            //             document.getElementById("#index").innerHTML += listItem;
-            //         });
-            //         document.getElementById("#index").innerHTML += '</ul>';
-            //     }
-            // });
-            $(this).animate({
-                color: 'red',
-            }, 1000);
-        });
-    })
-
-    $("button.buttonClass").click(function() {
-        console.log("we got a click");
-    });
-</script>
 
 </html>
