@@ -5,6 +5,25 @@
     <% include ../partials/header.ejs %>
 
         <script>
+        // console.log('here? 1');
+        // $(function() {
+            // console.log('here? 2');
+            // $('#formCompose').on('submit', function(e) {
+            //     e.preventDefault(); // we don't want the form to do a GET request
+            //     var title = $('#formComposeTitle').val();
+            //     var content = $('#formComposeContent').val();
+
+            //     console.log('title is:', title);
+            //     console.log('content is:', content);
+
+            //     $.post('/compose_finish',
+            //         {
+            //             title: title,
+            //             content: content
+            //         }
+            //     );
+            // });
+        // });
         </script>
 
 </head>
@@ -14,14 +33,17 @@
     <% include ../partials/nav.ejs %>
 
         <div class="container" id="compose">
-            <form id="formCompose">
+            <form id="formCompose" action="compose" method="post">
                 <div class="form-group">
-                    <label for="exampleFormControlInput1">Title</label>
-                    <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Example Title" required>
+                    <label for="formComposeTitle">Title</label>
+                    <input id="formComposeTitle" name="formComposeTitle" class="form-control" placeholder="Example Title" required>
                 </div>
                 <div class="form-group">
-                    <label for="exampleFormControlTextarea1">Content</label>
-                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="10" required></textarea>
+                    <label for="formComposeContent">Content</label>
+                    <textarea class="form-control" id="formComposeContent" name="formComposeContent" rows="10" required></textarea>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Submit">
                 </div>
             </form>
         </div>

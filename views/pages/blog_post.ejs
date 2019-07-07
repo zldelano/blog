@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <% include ../partials/header.ejs %>
+
+        <script>
+        $(function() {
+            $(window).on('load', function() {
+               // get our elements
+               var postId = $('#postId').attr('name');
+               var blogPostTitle = $('#blogPostTitle');
+               var blogPostContent = $('#blogPostContent');
+               var blogPostAuthor = $('#blogPostAuthor');
+               var blogPostComments = $('#blogPostComments');
+               var blogPostNewComment = $('#blogPostNewComment');
+
+               // get the content of the blog
+               $.getJSON("/api/blog_post/" + postId, function(result) {
+                  blogPostTitle.prepend(result.title);
+                  blogPostAuthor.append(result.author);
+                  blogPostContent.append(result.content);
+               });
+
+               // get the comments for the blog
+               $.getJSON("/api/comments/blog_post/" + postId, function(result) {
+                  console.log('do we even hit this? 1');
+                  $.each(result, function(i, field) {
+                  console.log('looped', i);
+                  console.log('type of i: ', typeof(i));
+                  console.log('type of field: ', typeof(field));
+                     blogPostComments.append('<tr><th>' + field.content + '<br><br><i>@' + field.author + '</i></th></tr>');
+                  })
+               });
+
+               // when we submit this new form
+               blogPostNewComment.submit(function(e) {
+                  e.preventDefault();
+                  $.ajax({
+                     url: '/api/comments/blog_post/' + postId,
+                     type: 'post',
+                     data: {
+                        postId: postId,
+                        content: $('#newCommentContent').val(),
+                     },
+                     success: function() {
+                        console.log('we did it! we posted!');
+                     }
+                  });
+               });
+            });
+        });
+        </script>
+
+</head>
+
+<body>
+
+   <% include ../partials/nav.ejs %>
+
+   <div class="container">
+
+      <div id=postId name=<%= postId %>></div>
+
+      <div class="page-header">
+         <h1 id="blogPostTitle"><br><small id="blogPostAuthor">By: </small></h1>
+      </div>
+
+      <p id="blogPostContent"></p><br><br>
+
+      <h2>Comments</h2>
+      <table id="commentsTable">
+      <div id="blogPostComments"></div>
+      </table><br><br>
+
+      <h3>New Comment</h3>
+      <form id="blogPostNewComment" action="/blog_post/<%= postId %>" method="post">
+      <textarea id="newCommentContent" name="newCommentContent"></textarea><br>
+      <input type="submit" value="Submit">
+      </form>
+   </div>
+
+</body>
+
+</html>
