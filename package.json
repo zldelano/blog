@@ -10,11 +10,16 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "bcrypt": "^3.0.6",
         "body-parser": "^1.19.0",
+        "cookie-parser": "^1.4.4",
         "dotenv": "8.0.0",
         "ejs": "^2.6.2",
         "express": "4.17.1",
+        "express-session": "^1.16.2",
         "jquery": "^3.4.1",
-        "pg": "7.11.0"
+        "node-bcrypt": "0.0.1",
+        "pg": "7.11.0",
+        "pg-prepared": "^2.5.13"
     }
 }

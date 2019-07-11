@@ -6,24 +6,30 @@
 
         <script>
         // console.log('here? 1');
-        // $(function() {
-            // console.log('here? 2');
-            // $('#formCompose').on('submit', function(e) {
-            //     e.preventDefault(); // we don't want the form to do a GET request
-            //     var title = $('#formComposeTitle').val();
-            //     var content = $('#formComposeContent').val();
+        $(function() {
+            console.log('here? 2');
+            $('#formCompose').on('submit', function(e) {
+                e.preventDefault(); // we don't want the form to do a GET request
+                var title = $('#formComposeTitle').val();
+                var content = $('#formComposeContent').val();
 
-            //     console.log('title is:', title);
-            //     console.log('content is:', content);
+                console.log('title is:', title);
+                console.log('content is:', content);
 
-            //     $.post('/compose_finish',
-            //         {
-            //             title: title,
-            //             content: content
-            //         }
-            //     );
-            // });
-        // });
+                $.post('/api/blog_post', {
+                        title: title,
+                        content: content
+                    }).done(function() {
+                    $('#statusOfCompose').html("<p>Successfully posted your blog!</p>");
+                    $('#statusOfCompose').addClass('alert-success').removeClass('alert-danger');
+                    $('#formComposeTitle').val("");
+                    $('#formComposeContent').val("");
+                }).fail(function() {
+                    $('#statusOfCompose').html("<p>Failed to make a new blog post.</p>");
+                    $('#statusOfCompose').addClass('alert-danger').removeClass('alert-success');
+                });;
+            });
+        });
         </script>
 
 </head>
@@ -33,7 +39,7 @@
     <% include ../partials/nav.ejs %>
 
         <div class="container" id="compose">
-            <form id="formCompose" action="compose" method="post">
+            <form id="formCompose">
                 <div class="form-group">
                     <label for="formComposeTitle">Title</label>
                     <input id="formComposeTitle" name="formComposeTitle" class="form-control" placeholder="Example Title" required>
@@ -46,6 +52,7 @@
                     <input type="submit" value="Submit">
                 </div>
             </form>
+            <div id="statusOfCompose" class="alert"></div>
         </div>
 
 </body>

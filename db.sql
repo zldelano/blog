@@ -1,5 +1,6 @@
 -- Setup extensions
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 -- Drop tables if they exist
 DROP TABLE IF EXISTS blog_user CASCADE;
@@ -10,6 +11,7 @@ CREATE TABLE blog_user (
    username VARCHAR(20) NOT NULL,
    name_first VARCHAR(30) NOT NULL,
    name_last  VARCHAR(30) NOT NULL,
+   password   VARCHAR(1023) NOT NULL,
 
    -- keys
    PRIMARY KEY (username),
@@ -52,11 +54,11 @@ CREATE TABLE blog_comment (
 
 -- Insert statements
 INSERT INTO blog_user
-   (username, name_first, name_last)
+   (username, name_first, name_last, password)
 VALUES
-   ('zdelano', 'Zach', 'Delano')
-   ,('cknesnej', 'Charlotte', 'Jensen')
-   ,('btskeem', 'Brianne', 'Skeem');
+   ('zdelano', 'Zach', 'Delano', CRYPT('password', gen_salt('bf', 8)))
+   ,('cknesnej', 'Charlotte', 'Jensen', CRYPT('password', gen_salt('bf', 8)))
+   ,('btskeem', 'Brianne', 'Skeem', CRYPT('password', gen_salt('bf', 8)));
 
 INSERT INTO blog_post
    (content, title, author)
