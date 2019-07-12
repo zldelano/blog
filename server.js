@@ -90,9 +90,30 @@ app
         // get a blog post by its ID
         pool.query(stmt, function(err, result) {
             if (err) {
+                res.send(500);
                 return console.error('error running query', err);
             }
             res.json(result.rows[0]);
+        });
+    })
+    .put('/api/blog_post/:id', isAuthed, function(req, res) {
+        const stmt1 = {
+            name: 'update-blog-post',
+            text: 'UPDATE blog_post SET title=$1, content=$2 WHERE post_id=$3 AND author=$4',
+            values: [
+                req.body.title,
+                req.body.content,
+                req.params.id,
+                req.session.username
+            ]
+        };
+        // get a blog post by its ID
+        pool.query(stmt1, function(err, result) {
+            if (err) {
+                res.send(403);
+                return console.error('error running query for update', err);
+            }
+            res.json(result.rows);
         });
     })
     .get('/api/blog_post/author/:author', isAuthed, function(req, res) {
@@ -115,14 +136,11 @@ app
             text: 'SELECT * FROM blog_post JOIN blog_user ON blog_user.username=$1 WHERE blog_post.author=$1',
             values: [req.session.username]
         };
-        console.log(req.session.username);
         // get blog posts by the author
         pool.query(stmt, function(err, result) {
             if (err) {
                 return console.error('error running query', err);
             }
-            console.log(stmt);
-            console.log(result.rows);
             res.json(result.rows);
         });
     })
@@ -177,9 +195,8 @@ app
     .get('/logout', function(req, res) {
         req.session.destroy(function(err) {
             if (err) {
-                console.log(err);
+                return console.error('error logging out', err);
             } else {
-                console.log(session.username);
                 res.redirect('/login');
             }
         });
@@ -196,6 +213,9 @@ app
     })
     .get('/compose', isAuthed, function(req, res) {
         res.render('pages/compose');
+    })
+    .get('/compose/:id', isAuthed, function(req, res) {
+        res.render('pages/compose_update');
     })
     .get('/profile', isAuthed, function(req, res) {
         res.json({ "message": "there ain't nothin' here yet fool" });

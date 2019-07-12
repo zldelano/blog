@@ -24,11 +24,7 @@
 
                // get the comments for the blog
                $.getJSON("/api/comments/blog_post/" + postId, function(result) {
-                  console.log('do we even hit this? 1');
                   $.each(result, function(i, field) {
-                  console.log('looped', i);
-                  console.log('type of i: ', typeof(i));
-                  console.log('type of field: ', typeof(field));
                      blogPostComments.append('<tr><th>' + field.content + '<br><i>@' + field.author + '</i><br><br></th></tr>');
                   })
                });
@@ -44,7 +40,7 @@
                         content: $('#newCommentContent').val(),
                      },
                      success: function() {
-                        console.log('we did it! we posted!');
+                        // console.log('we did it! we posted!');
                      }
                   });
                });

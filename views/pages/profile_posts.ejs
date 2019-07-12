@@ -11,7 +11,7 @@
                     // load the page with blog posts
                     $.getJSON("/api/profile/blog_post", function(data) {
                         $.each(data, function(key, val) {
-                            posts.append('<a href="/blog_post/' + val.post_id + '" class="list-group-item">' + val.title + '</a>');
+                            posts.append('<li class="list-group-item"><a href="/blog_post/' + val.post_id + '">' + val.title + '<a href="/compose/' + val.post_id + '" class="pull-right" >Edit</a></a></li>');
                         });
                     });
                 });

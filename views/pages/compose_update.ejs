@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <% include ../partials/header.ejs %>
+
+        <script>
+        $(function() {
+           var post_id = "";
+            $(window).load(function() {
+                  post_id = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+                  console.log(post_id);
+                  $.get("/api/blog_post/" + post_id, function (data) {
+                     $('#formComposeUpdateTitle').val(data.title);
+                     $('#formComposeUpdateContent').val(data.content);
+                  });
+               }
+            );
+
+            $('#formComposeUpdate').on('submit', function(e) {
+                e.preventDefault(); // we don't want the form to do a GET request
+                var title = $('#formComposeUpdateTitle').val();
+                var content = $('#formComposeUpdateContent').val();
+
+                $.ajax({
+                    url: '/api/blog_post/' + post_id,
+                    type: 'put',
+                    data: {
+                       title: title,
+                       content: content
+                    }
+                }).done(function() {
+                    $('#statusOfComposeUpdate').html("<p>Successfully updated your blog!</p>");
+                    $('#statusOfComposeUpdate').addClass('alert-success').removeClass('alert-danger');
+                    $('#formComposeUpdateTitle').val("");
+                    $('#formComposeUpdateContent').val("");
+                }).fail(function() {
+                    $('#statusOfComposeUpdate').html("<p>Failed to update blog post.</p>");
+                    $('#statusOfComposeUpdate').addClass('alert-danger').removeClass('alert-success');
+                });;
+            });
+        });
+        </script>
+
+</head>
+
+<body>
+
+    <% include ../partials/nav.ejs %>
+
+        <div class="container" id="composeUpdate">
+            <form id="formComposeUpdate">
+                <div class="form-group">
+                    <label for="formComposeUpdateTitle">Title</label>
+                    <input id="formComposeUpdateTitle" name="formComposeUpdateTitle" class="form-control" placeholder="Example Title" required>
+                </div>
+                <div class="form-group">
+                    <label for="formComposeUpdateContent">Content</label>
+                    <textarea class="form-control" id="formComposeUpdateContent" name="formComposeUpdateContent" rows="10" required></textarea>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Submit">
+                </div>
+            </form>
+            <div id="statusOfComposeUpdate" class="alert"></div>
+        </div>
+
+</body>
+
+</html>
