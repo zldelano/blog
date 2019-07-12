@@ -33,7 +33,7 @@ CREATE TABLE blog_post (
 
    -- constraints
    CONSTRAINT title_length CHECK (CHAR_LENGTH(title) > 0),
-   CONSTRAINT post_length CHECK (CHAR_LENGTH(title) > 9)
+   CONSTRAINT post_length CHECK (CHAR_LENGTH(content) > 0)
 );
 
 CREATE TABLE blog_comment (
@@ -63,9 +63,9 @@ VALUES
 INSERT INTO blog_post
    (content, title, author)
 VALUES
-   ('This is the  content of Zach''s post.', 'Title, Example #1', 'zdelano')
-   ,('Content example... testing.', 'Title, Example #2', 'cknesnej')
-   ,('Oh well, whatever.', 'Title, Example #3', 'btskeem');
+   ('This is the  content of Zach''s post.', 'This is not a real post', 'zdelano')
+   ,('Content example... testing.', 'Zipidee Doodah', 'cknesnej')
+   ,('Oh well, whatever.', 'Zippidee-ay', 'btskeem');
 
 
 INSERT INTO blog_comment

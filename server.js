@@ -112,14 +112,17 @@ app
     .get('/api/profile/blog_post/', isAuthed, function(req, res) {
         const stmt = {
             name: 'fetch-blogs-for-profile',
-            text: 'SELECT * FROM blog_post JOIN blog_user ON blog_user.username=$1 WHERE blog_user.username=$1',
+            text: 'SELECT * FROM blog_post JOIN blog_user ON blog_user.username=$1 WHERE blog_post.author=$1',
             values: [req.session.username]
         };
+        console.log(req.session.username);
         // get blog posts by the author
         pool.query(stmt, function(err, result) {
             if (err) {
                 return console.error('error running query', err);
             }
+            console.log(stmt);
+            console.log(result.rows);
             res.json(result.rows);
         });
     })
