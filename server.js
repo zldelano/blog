@@ -109,10 +109,10 @@ app
             res.json(result.rows);
         });
     })
-    .get('/api/blog_post/profile', isAuthed, function(req, res) {
+    .get('/api/profile/blog_post/', isAuthed, function(req, res) {
         const stmt = {
             name: 'fetch-blogs-for-profile',
-            text: 'SELECT * FROM blog_post JOIN blog_user ON blog_user.username=$1',
+            text: 'SELECT * FROM blog_post JOIN blog_user ON blog_user.username=$1 WHERE blog_user.username=$1',
             values: [req.session.username]
         };
         // get blog posts by the author

@@ -13,9 +13,6 @@
                 var title = $('#formComposeTitle').val();
                 var content = $('#formComposeContent').val();
 
-                console.log('title is:', title);
-                console.log('content is:', content);
-
                 $.post('/api/blog_post', {
                         title: title,
                         content: content

@@ -6,15 +6,12 @@
 
         <script>
             $(function() {
-                console.log('here 1');
                 $(window).on('load', function() {
-                    console.log('here 2');
+                    var posts = $('#profilePosts');
                     // load the page with blog posts
-                    $.getJSON("/api/blog_post/profile", function(data) {
-                        console.log('here 3');
+                    $.getJSON("/api/profile/blog_post", function(data) {
                         $.each(data, function(key, val) {
-                            console.log('here 4');
-                            console.log(key,val);
+                            posts.append('<a href="/blog_post/' + val.post_id + '" class="list-group-item">' + val.title + '</a>');
                         });
                     });
                 });
@@ -27,7 +24,9 @@
 
     <% include ../partials/nav.ejs %>
 
-        <div class="container" id="index">
+        <div class="container">
+            <div id="profilePosts" class="list-group">
+            </div>
         </div>
 
 </body>
