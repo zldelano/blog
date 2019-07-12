@@ -6,21 +6,16 @@
 
         <script>
             $(function() {
+                console.log('here 1');
                 $(window).on('load', function() {
+                    console.log('here 2');
                     // load the page with blog posts
-                    $.ajax({
-                        url: "api/blog_post",
-                        success: function(result) {
-                            var listPrefix = '<ul class="list-group">';
-                            var blogList = listPrefix;
-                            result.forEach(function(item) {
-                                var listItem = '<li class="list-group-item" id="' + item['post_id'] + '"><h4><a class="blog_post" href="blog_post/' + item['post_id'] + '">' + item['title'] + '</a><br><small>' + item['author'] + '</small></h4></li>';
-                                blogList += listItem;
-                            });
-                            listPostfix = '</ul>';
-                            blogList += listPostfix;
-                            index.html(blogList);
-                        }
+                    $.getJSON("/api/blog_post/profile", function(data) {
+                        console.log('here 3');
+                        $.each(data, function(key, val) {
+                            console.log('here 4');
+                            console.log(key,val);
+                        });
                     });
                 });
             });
