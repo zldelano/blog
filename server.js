@@ -184,7 +184,11 @@ app
             if (err) {
                 return console.error('error running query', err);
             }
-            res.json(result.rows);
+            res.json({
+                content: req.body.content,
+                username: req.session.username,
+                postId: req.body.postId
+            });
         });
     })
     .post('/api/new_user', function(req, res) {

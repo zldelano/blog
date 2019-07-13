@@ -39,8 +39,8 @@
                         postId: postId,
                         content: $('#newCommentContent').val(),
                      },
-                     success: function() {
-                        // console.log('we did it! we posted!');
+                     success: function(data) {
+                        blogPostComments.append('<tr><th>' + data.content + '<br><i>@' + data.author + '</i><br><br></th></tr>');
                      }
                   });
                });
