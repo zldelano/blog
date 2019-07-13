@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <% include ../partials/header.ejs %>
+
+        <script>
+        $(function() {
+            $(window).load(function() {
+               $('#newUserForm').submit(function(e) {
+                  e.preventDefault();
+                  // get auth info
+                  var username = $('#inputUsername').val();
+                  var password = $('#inputPassword').val();
+                  var name_first = $('#inputNameFirst').val();
+                  var name_last = $('#inputNameLast').val();
+                  console.log(username);
+                  // try to get to the index page
+                  $.ajax({
+                     type: 'POST',
+                     url: '/api/new_user',
+                     data: {
+                        username: username,
+                        password: password,
+                        name_first: name_first,
+                        name_last: name_last
+                     },
+                     success: function() {
+                        $(location).attr('href', '/login');
+                     },
+                     fail: function(xhr, textStatus, error) {
+                        console.error('the service could not create a new account', error);
+                     }
+                  });
+               });
+            });
+        });
+        </script>
+
+</head>
+
+<body>
+
+   <% include ../partials/nav.ejs %>
+
+   <div class="container" id="loginSection">
+   <form id="newUserForm">
+      <div class="form-group">
+         <label for="inputNameFirst">First Name</label>
+         <input type="text" class="form-control" id="inputNameFirst" aria-describedby="nameFirstHelp" placeholder="Ex: John" required>
+         <small id="nameFirstHelp" class="form-text text-muted">Enter your first name</small>
+      </div>
+      <div class="form-group">
+         <label for="inputNameLast">Last Name</label>
+         <input type="text" class="form-control" id="inputNameLast" aria-describedby="nameLastHelp" placeholder="Ex: Doe" required>
+         <small id="nameLastHelp" class="form-text text-muted">Enter your last name</small>
+      </div>
+      <div class="form-group">
+         <label for="inputUsername">Username</label>
+         <input type="text" class="form-control" id="inputUsername" aria-describedby="usernameHelp" placeholder="Username" required>
+         <small id="usernameHelp" class="form-text text-muted">Enter your username for your new account</small>
+      </div>
+      <div class="form-group">
+         <label for="inputPassword">Password</label>
+         <input type="password" class="form-control" id="inputPassword" placeholder="Password" required>
+      </div>
+      <div class="form-group">
+         <label for="inputPasswordVerify">Password</label>
+         <input type="password" class="form-control" id="inputPasswordVerify" aria-describedby="passwordHelp" placeholder="Password" required>
+         <small id="passwordHelp" class="form-text text-muted">Re-type your password</small>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+   </form>
+   </div>
+
+</body>
+
+</html>

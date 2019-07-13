@@ -187,6 +187,27 @@ app
             res.json(result.rows);
         });
     })
+    .post('/api/new_user', function(req, res) {
+        console.log('route `/api/new_user` was hit');
+        const stmt = {
+            name: 'insert-new-user',
+            text: 'INSERT INTO blog_user (username, password, name_first, name_last) VALUES ($1, $2, $3, $4)',
+            values: [
+                req.body.username,
+                bcrypt.hashSync(req.body.password, salt),
+                req.body.name_first,
+                req.body.name_last
+            ]
+        };
+        // insert the new user
+        pool.query(stmt, function(err, result) {
+            if (err) {
+                res.send(500);
+                return console.error('error creating new user', err);
+            }
+            res.json({});
+        });
+    })
     // client side stuff
     // no auth middleware required
     .get('/login', function(req, res) {
@@ -225,6 +246,9 @@ app
             username: req.session.username
         });
     })
+    .get('/new_user', function(req, res) {
+        res.render('pages/new_user');
+    })
     .listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
 // middleware
@@ -233,4 +257,8 @@ function isAuthed(req, res, next) {
         return next();
     }
     res.redirect('/login');
+}
+
+function destroySession(req, res, next) {
+    req.session.destroy();
 }
