@@ -6,33 +6,58 @@
 
         <script>
         $(function() {
+           // we'll use this to make sure that the user gets their password right
+           var passwordsMatch = false;
+
             $(window).load(function() {
                $('#newUserForm').submit(function(e) {
                   e.preventDefault();
-                  // get auth info
-                  var username = $('#inputUsername').val();
-                  var password = $('#inputPassword').val();
-                  var name_first = $('#inputNameFirst').val();
-                  var name_last = $('#inputNameLast').val();
-                  console.log(username);
-                  // try to get to the index page
-                  $.ajax({
-                     type: 'POST',
-                     url: '/api/new_user',
-                     data: {
-                        username: username,
-                        password: password,
-                        name_first: name_first,
-                        name_last: name_last
-                     },
-                     success: function() {
-                        $(location).attr('href', '/login');
-                     },
-                     fail: function(xhr, textStatus, error) {
-                        console.error('the service could not create a new account', error);
-                     }
-                  });
+                  if (passwordsMatch) {
+                     // get auth info
+                     var username = $('#inputUsername').val();
+                     var password = $('#inputPassword').val();
+                     var name_first = $('#inputNameFirst').val();
+                     var name_last = $('#inputNameLast').val();
+                     console.log(username);
+                     // try to get to the index page
+                     $.ajax({
+                        type: 'POST',
+                        url: '/api/new_user',
+                        data: {
+                           username: username,
+                           password: password,
+                           name_first: name_first,
+                           name_last: name_last
+                        },
+                        success: function() {
+                           $(location).attr('href', '/login');
+                        },
+                        fail: function(xhr, textStatus, error) {
+                           console.error('the service could not create a new account', error);
+                        }
+                     });
+                  } else {
+                     alert("Your passwords must match!");
+                  }
                });
+
+               var passVerify = $('#inputPasswordVerify');
+               var compare = $('#comparePasswords');
+
+               passVerify.on('input', function() {
+                  console.log('hitting this event');
+                  var pass = $('#inputPassword').val();
+                  var pass2 = passVerify.val();
+                  if (pass != pass2) {
+                     compare.removeClass('alert-success').addClass('alert-danger');
+                     compare.html('Passwords must match!');
+                     passwordsMatch = false;
+                  } else {
+                     compare.removeClass('alert-danger').addClass('alert-success');
+                     compare.html('Passwords match!');
+                     passwordsMatch = true;
+                  }
+               })
             });
         });
         </script>
@@ -57,7 +82,7 @@
       </div>
       <div class="form-group">
          <label for="inputUsername">Username</label>
-         <input type="text" class="form-control" id="inputUsername" aria-describedby="usernameHelp" placeholder="Username" required>
+         <input type="text" class="form-control" id="inputUsername" aria-describedby="usernameHelp" placeholder="Username" pattern=".{4,}" required title="4 characters minimum">
          <small id="usernameHelp" class="form-text text-muted">Enter your username for your new account</small>
       </div>
       <div class="form-group">
@@ -68,6 +93,8 @@
          <label for="inputPasswordVerify">Password</label>
          <input type="password" class="form-control" id="inputPasswordVerify" aria-describedby="passwordHelp" placeholder="Password" required>
          <small id="passwordHelp" class="form-text text-muted">Re-type your password</small>
+      </div>
+      <div id="comparePasswords" class="alert">
       </div>
       <button type="submit" class="btn btn-primary">Submit</button>
    </form>
