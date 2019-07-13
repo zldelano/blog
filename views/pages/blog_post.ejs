@@ -71,8 +71,12 @@
 
       <h3>New Comment</h3>
       <form id="blogPostNewComment" action="/blog_post/<%= postId %>" method="post">
-      <textarea id="newCommentContent" name="newCommentContent"></textarea><br>
-      <input type="submit" value="Submit">
+      <div>
+         <i class="fas fa-pencil-alt prefix"></i>
+         <textarea id="newCommentContent" name="newCommentContent" class="form-control" rows="3"></textarea>
+         <label for="newCommentContent">Submit a new Comment</label>
+      </div>
+      <input type="submit" class="btn btn-primary mb-2" value="Submit">
       </form>
    </div>
 
