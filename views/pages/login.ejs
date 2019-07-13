@@ -12,6 +12,7 @@
                   // get auth info
                   var username = $('#inputUsername').val();
                   var password = $('#inputPassword').val();
+                  var loginAttemptMessage = $('#loginAttemptMessage');
                   console.log(username);
                   // try to get to the index page
                   $.ajax({
@@ -21,9 +22,20 @@
                         username: username,
                         password: password
                      },
-                     success: function(result) {
-                        console.log(result);
+                     statusCode: {
+                        403: function(xhr) {
+                           loginAttemptMessage.addClass('alert-danger');
+                           loginAttemptMessage.html('Invalid credentials.');   
+                        }
+                     },
+                     success: function(data, textStatus, xhr) {
+                        loginAttemptMessage.removeClass('alert-danger');
+                        loginAttemptMessage.html('');
                         $(location).attr('href', '/');
+                     },
+                     fail: function() {
+                        loginAttemptMessage.addClass('alert-danger');
+                        loginAttemptMessage.html('Could not log in.');
                      }
                   });
                });
@@ -42,19 +54,21 @@
    <% include ../partials/nav.ejs %>
 
    <div class="container" id="loginSection">
-   <form id="loginForm">
-      <div class="form-group">
-         <label for="inputUsername">Username</label>
-         <input type="text" class="form-control" id="inputUsername" aria-describedby="usernameHelp" placeholder="Enter username" required>
-         <small id="usernameHelp" class="form-text text-muted">Enter the username for your account</small>
+      <form id="loginForm">
+         <div class="form-group">
+            <label for="inputUsername">Username</label>
+            <input type="text" class="form-control" id="inputUsername" aria-describedby="usernameHelp" placeholder="Enter username" required>
+            <small id="usernameHelp" class="form-text text-muted">Enter the username for your account</small>
+         </div>
+         <div class="form-group">
+            <label for="inputPassword">Password</label>
+            <input type="password" class="form-control" id="inputPassword" placeholder="Password" required>
+         </div>
+         <button type="submit" class="btn btn-primary">Login</button>
+         <button type="button" class="newAccount btn btn-secondary">Create Account</button>
+      </form>
+      <div id="loginAttemptMessage" class="alert">
       </div>
-      <div class="form-group">
-         <label for="inputPassword">Password</label>
-         <input type="password" class="form-control" id="inputPassword" placeholder="Password" required>
-      </div>
-      <button type="submit" class="btn btn-primary">Login</button>
-      <button type="button" class="newAccount btn btn-secondary">Create Account</button>
-   </form>
    </div>
 
 </body>
