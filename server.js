@@ -186,7 +186,7 @@ app
             }
             res.json({
                 content: req.body.content,
-                username: req.session.username,
+                author: req.session.username,
                 postId: req.body.postId
             });
         });
