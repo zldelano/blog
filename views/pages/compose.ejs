@@ -5,9 +5,7 @@
     <% include ../partials/header.ejs %>
 
         <script>
-        // console.log('here? 1');
         $(function() {
-            console.log('here? 2');
             $('#formCompose').on('submit', function(e) {
                 e.preventDefault(); // we don't want the form to do a GET request
                 var title = $('#formComposeTitle').val();

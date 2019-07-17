@@ -202,7 +202,6 @@ app
     //      name_first: string
     //      name_last:  string
     .post('/api/new_user', function(req, res) {
-        console.log('route `/api/new_user` was hit');
         const stmt = {
             name: 'insert-new-user',
             text: 'INSERT INTO blog_user (username, password, name_first, name_last) VALUES ($1, $2, $3, $4)',

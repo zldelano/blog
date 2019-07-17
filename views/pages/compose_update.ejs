@@ -9,7 +9,6 @@
            var post_id = "";
             $(window).load(function() {
                   post_id = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
-                  console.log(post_id);
                   $.get("/api/blog_post/" + post_id, function (data) {
                      $('#formComposeUpdateTitle').val(data.title);
                      $('#formComposeUpdateContent').val(data.content);
