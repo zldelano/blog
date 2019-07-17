@@ -6,19 +6,7 @@
 
         <script>
             $(function() {
-                $("button.buttonClass").click(function() {
-                    console.log("we got a click");
-                });
-
                 var index = $('#index');
-                index.load(function() {
-                    console.log("index was loaded");
-                });
-
-                index.ready(function() {
-                    console.log("index is ready");
-                });
-
                 $(window).on('load', function() {
                     // load the page with blog posts
                     $.ajax({

@@ -30,6 +30,9 @@ app
     .set('views', path.join(__dirname, 'views'))
     .set('view engine', 'ejs')
     // stuff we get from our API
+    // verify the user's credentials are valid
+    // POST body
+    //      username:   string
     .post('/api/authenticate', function(req, res) {
         const stmt = {
             name: "fetch-user",
@@ -55,19 +58,9 @@ app
             }
         });
     })
-    .get('/api/user', isAuthed, function(req, res) {
-        const stmt = {
-            name: 'fetch-user',
-            text: 'SELECT * FROM blog_user'
-        };
-        // get a user
-        pool.query(stmt, function(err, result) {
-            if (err) {
-                return console.error('error running query', err);
-            }
-            res.json(result.rows);
-        });
-    })
+    // get all blog posts
+    // GET parameters
+    //      <none>
     .get('/api/blog_post', isAuthed, function(req, res) {
         const stmt = {
             name: 'fetch-blogs',
@@ -81,6 +74,9 @@ app
             res.json(result.rows);
         });
     })
+    // show one blog post
+    // GET parameters
+    //      id:         UUID
     .get('/api/blog_post/:id', isAuthed, function(req, res) {
         const stmt = {
             name: 'fetch-blog-by-id',
@@ -96,6 +92,12 @@ app
             res.json(result.rows[0]);
         });
     })
+    // update a blog post
+    // PUT body
+    //      title:      string
+    //      content:    string
+    //      username:   string
+    //      id:         UUID
     .put('/api/blog_post/:id', isAuthed, function(req, res) {
         const stmt1 = {
             name: 'update-blog-post',
@@ -116,20 +118,9 @@ app
             res.json(result.rows);
         });
     })
-    .get('/api/blog_post/author/:author', isAuthed, function(req, res) {
-        const stmt = {
-            name: 'fetch-blogs-by-author',
-            text: 'SELECT * FROM blog_post JOIN blog_user ON blog_user.username=$1',
-            values: [req.params.author]
-        };
-        // get blog posts by the author
-        pool.query(stmt, function(err, result) {
-            if (err) {
-                return console.error('error running query', err);
-            }
-            res.json(result.rows);
-        });
-    })
+    // get all of the blog posts for a user
+    // GET parameters
+    //      <none>
     .get('/api/profile/blog_post/', isAuthed, function(req, res) {
         const stmt = {
             name: 'fetch-blogs-for-profile',
@@ -144,6 +135,11 @@ app
             res.json(result.rows);
         });
     })
+    // make a new blog post
+    // POST body
+    //      content:    string
+    //      title:      string
+    //      username:   string
     .post('/api/blog_post', isAuthed, function(req, res) {
         const stmt = {
             name: 'insert-new-blog-post',
@@ -159,6 +155,9 @@ app
             res.json(result.rows);
         });
     })
+    // show one blog
+    // GET parameters
+    //      blog_post_id:   UUID
     .get('/api/comments/blog_post/:blog_post_id', isAuthed, function(req, res) {
         const stmt = {
             name: 'get-blog-post-by-id',
@@ -173,6 +172,11 @@ app
             res.json(result.rows);
         });
     })
+    // add a comment to a blog
+    // POST body
+    //      content:    string
+    //      username:   string
+    //      postId:     UUID
     .post('/api/comments/blog_post/:blog_post_id', isAuthed, function(req, res) {
         const stmt = {
             name: 'insert-new-comment-on-blog',
@@ -191,6 +195,12 @@ app
             });
         });
     })
+    // create a new user
+    // POST body
+    //      username:   string
+    //      password:   string
+    //      name_first: string
+    //      name_last:  string
     .post('/api/new_user', function(req, res) {
         console.log('route `/api/new_user` was hit');
         const stmt = {
@@ -226,7 +236,7 @@ app
             }
         });
     })
-    // the restof these routes require auth middleware
+    // the rest of these routes require auth middleware
     .get('/blog_post/:id', isAuthed, function(req, res) {
         // get a specific blog post by its ID
         res.render('pages/blog_post', {

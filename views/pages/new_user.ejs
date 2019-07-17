@@ -18,7 +18,6 @@
                      var password = $('#inputPassword').val();
                      var name_first = $('#inputNameFirst').val();
                      var name_last = $('#inputNameLast').val();
-                     console.log(username);
                      // try to get to the index page
                      $.ajax({
                         type: 'POST',
@@ -45,7 +44,6 @@
                var compare = $('#comparePasswords');
 
                passVerify.on('input', function() {
-                  console.log('hitting this event');
                   var pass = $('#inputPassword').val();
                   var pass2 = passVerify.val();
                   if (pass != pass2) {
